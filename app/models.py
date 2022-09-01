@@ -14,11 +14,9 @@ class Administrator(db.Model):
     administrator_password_hash = db.Column(db.String(255), nullable=False)
     administrator_first_access = db.Column(db.Boolean, default=False)
 
-    def __init__(self, administrator_id, administrator_name, administrator_password_hash, administrator_first_access):
-        self.administrator_id = administrator_id
+    def __init__(self, administrator_name, administrator_password_hash):
         self.administrator_name = administrator_name
         self.administrator_password_hash = administrator_password_hash
-        self.administrator_first_access = administrator_first_access
 
     def __repr__(self):
         return f'<administrator_id: {self.administrator_id}, administrator_name: {self.administrator_name}, administrator_password_hash: {self.administrator_password_hash}, administrator_first_access: {self.administrator_first_access}>'
@@ -38,9 +36,7 @@ class AdministratorLogs(db.Model):
 
     employee = db.relationship('Administrator', foreign_keys=administratorlogs_administrator_id)
 
-    def __init__(self, administratorlogs_id, administratorlogs_datetime, administratorlogs_type, administratorlogs_administrator_id, administratorlogs_action):
-        self.administratorlogs_id = administratorlogs_id
-        self.administratorlogs_datetime = administratorlogs_datetime
+    def __init__(self, administratorlogs_type, administratorlogs_administrator_id, administratorlogs_action):
         self.administratorlogs_type = administratorlogs_type
         self.administratorlogs_administrator_id = administratorlogs_administrator_id
         self.administratorlogs_action = administratorlogs_action
@@ -62,13 +58,11 @@ class Employee(db.Model):
     employee_password_hash = db.Column(db.String(255), nullable=False)
     employee_first_access = db.Column(db.Boolean, default=False)
 
-    def __init__(self, employee_id, employee_cpf, employee_email, employee_name, employee_password_hash, employee_first_access):
-        self.employee_id = employee_id
+    def __init__(self, employee_cpf, employee_email, employee_name, employee_password_hash):
         self.employee_cpf = employee_cpf
         self.employee_email = employee_email
         self.employee_name = employee_name
         self.employee_password_hash = employee_password_hash
-        self.employee_first_access = employee_first_access
 
     def __repr__(self):
         return f'<employee_id: {self.employee_id}, employee_cpf: {self.employee_cpf}, employee_email: {self.employee_email}, employee_name: {self.employee_name}, employee_password_hash: {self.employee_password_hash}, employee_first_access: {self.employee_first_access}>'
@@ -88,9 +82,7 @@ class EmployeeLogs(db.Model):
 
     employee = db.relationship('Employee', foreign_keys=employeelogs_employee_id)
 
-    def __init__(self, employeelogs_id, employeelogs_datetime, employeelogs_type, employeelogs_employee_id, employeelogs_action):
-        self.employeelogs_id = employeelogs_id
-        self.employeelogs_datetime = employeelogs_datetime
+    def __init__(self, employeelogs_type, employeelogs_employee_id, employeelogs_action):
         self.employeelogs_type = employeelogs_type
         self.employeelogs_employee_id = employeelogs_employee_id
         self.employeelogs_action = employeelogs_action
@@ -113,8 +105,7 @@ class Clock(db.Model):
 
     employee = db.relationship('Employee', foreign_keys=clock_employee_id)
 
-    def __init__(self, clock_id, clock_employee_id, clock_input, clock_output, clock_extra):
-        self.clock_id = clock_id
+    def __init__(self, clock_employee_id, clock_input, clock_output, clock_extra):
         self.clock_employee_id = clock_employee_id
         self.clock_input = clock_input
         self.clock_output = clock_output
