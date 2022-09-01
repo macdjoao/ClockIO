@@ -12,8 +12,8 @@ def response(status, content_name, content, message = False):
     return Response(json.dumps(body, default=str), status=status, mimetype="application/json")
 
 def employee_log(employeelogs_type, employeelogs_employee_id, employeelogs_action):
-    log = EmployeeLogs(employeelogs_type=employeelogs_type, employeelogs_employee_id=employeelogs_employee_id, employeelogs_action=employeelogs_action)
-    return log
+    log_object = EmployeeLogs(employeelogs_type=employeelogs_type, employeelogs_employee_id=employeelogs_employee_id, employeelogs_action=employeelogs_action)
+    return log_object
 
 def administrator_log(administratorlogs_type, administratorlogs_administrator_id, administratorlogs_action):
     log_object = AdministratorLogs(administratorlogs_type=administratorlogs_type, administratorlogs_administrator_id=administratorlogs_administrator_id, administratorlogs_action=administratorlogs_action)
