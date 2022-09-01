@@ -1,15 +1,18 @@
-from email.policy import default
 from . import db
 
+# Migrate updates to the database
+# $ flask db stamp head
+# $ flask db migrate
+# $ flask db upgrade
 
 class Employee(db.Model):
     __tablename__ = 'employees'
 
     employee_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     employee_cpf = db.Column(db.String(11), nullable=False, unique=True)
-    employee_email = db.Column(db.String, nullable=False, unique=True)
-    employee_name = db.Column(db.String(200), nullable=False)
-    employee_password_hash = db.Column(db.String, nullable=False)
+    employee_email = db.Column(db.String(255), nullable=False, unique=True)
+    employee_name = db.Column(db.String(255), nullable=False)
+    employee_password_hash = db.Column(db.String(255), nullable=False)
     employee_first_access = db.Column(db.Boolean, default=False)
 
     def __init__(self, employee_id, employee_cpf, employee_email, employee_name, employee_password_hash, employee_first_access):
