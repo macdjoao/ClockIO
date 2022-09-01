@@ -1,7 +1,6 @@
-from crypt import methods
 from .models import Employee, EmployeeLogs, Administrator, AdministratorLogs, Clock 
 from . import app, db
-from flask import Response, request, render_template
+from flask import Response, request
 import json
 
 
@@ -20,6 +19,16 @@ def administrator_log(administratorlogs_type, administratorlogs_administrator_id
     log_object = AdministratorLogs(administratorlogs_type=administratorlogs_type, administratorlogs_administrator_id=administratorlogs_administrator_id, administratorlogs_action=administratorlogs_action)
     return log_object
 
+def validator_cpf(cpf):
+    valid_cpf = str(cpf)
+    valid_cpf = valid_cpf.replace('-', '')
+    valid_cpf = valid_cpf.replace('.', '')
+    valid_cpf = valid_cpf.replace(' ', '')
+    if valid_cpf.isdigit() and len(valid_cpf) == 11:
+        return valid_cpf
+    else:
+        raise ValueError
+
 @app.route('/')
 def index():
     return 'hello world'
@@ -28,15 +37,15 @@ def index():
 def create_employee():
     body = request.get_json()
     try:
-        employee_object = Employee(employee_cpf=body['employee_cpf'], employee_email=body['employee_email'], employee_name=body['employee_name'], employee_password_hash=body['employee_password_hash'])
-        log_object = administrator_log('POST', 1, f'CREATE A EMPLOYEE {body["employee_name"]}')
-        db.session.add(employee_object)
-        db.session.add(log_object)
-        db.session.commit()
-        return response(201, 'Employee', employee_object.to_json(), 'Employee created')
+            employee_object = Employee(employee_cpf=validator_cpf(body['employee_cpf']), employee_email=body['employee_email'], employee_name=body['employee_name'], employee_password_hash=body['employee_password_hash'])
+            log_object = administrator_log('POST', 1, f'CREATE A EMPLOYEE {body["employee_name"]}')
+            db.session.add(employee_object)
+            db.session.add(log_object)
+            db.session.commit()
+            return response(201, 'Employee', employee_object.to_json(), 'Employee created')
     except Exception as exception:
-        print('Error', exception)
-        return response(400, 'Employee', {}, 'Employee not created')
+            print('Error', exception)
+            return response(400, 'Employee', {}, 'Employee not created')
 
 @app.route('/employee/<employee_id>', methods = ['PUT'])
 def update_employee(employee_id):
@@ -44,7 +53,7 @@ def update_employee(employee_id):
     body = request.get_json()
     try:
         if ('employee_cpf' in body):
-            employee_object.employee_cpf = body['employee_cpf']
+            employee_object.employee_cpf = validator_cpf(body['employee_cpf'])
         if ('employee_email' in body):
             employee_object.employee_email = body['employee_email']
         if ('employee_name' in body):
