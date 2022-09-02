@@ -68,3 +68,16 @@ def update_employee(employee_id):
     except Exception as exception:
         print('Error', exception)
         return response(400, 'Employee', employee_id, 'Employee not updated')
+
+@app.route('/employee/<employee_id>', methods = ['DELETE'])
+def delete_employee(employee_id):
+    employee_object = Employee.query.filter_by(employee_id = employee_id).first()
+    try:
+        log_object = administrator_log('DELETE', 1, f'DELETE EMPLOYEE {employee_id}')
+        db.session.delete(employee_object)
+        db.session.add(log_object)
+        db.session.commit()
+        return response(200, "Employee", employee_object.to_json(), "Employee deleted")
+    except Exception as exception:
+        print("Error", exception)
+        return response(400, "Employee", {}, "Employee not deleted")
