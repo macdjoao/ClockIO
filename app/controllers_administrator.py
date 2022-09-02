@@ -1,7 +1,9 @@
+from crypt import methods
 from .models import Employee, EmployeeLogs, Administrator, AdministratorLogs, Clock
 from .ordinary_functions import response, employee_log, administrator_log, validator_cpf
 from . import app, db
 from flask import request
+import json
 
 
 @app.route('/')
@@ -21,6 +23,16 @@ def create_employee():
     except Exception as exception:
             print('Error', exception)
             return response(400, 'Employee', {}, 'Employee not created')
+
+@app.route('/employee', methods = ['GET'])
+def read_employee_all():
+    employees_objects = Employee.query.all()
+    employees_json = [employee.to_json() for employee in employees_objects]
+    return response(200, 'Employees', employees_json, 'OK')
+
+@app.route('/employee/<employee_id>', methods = ['GET'])
+def read_employee_single():
+    pass
 
 @app.route('/employee/<employee_id>', methods = ['PUT'])
 def update_employee(employee_id):
