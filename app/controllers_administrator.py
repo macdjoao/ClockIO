@@ -31,8 +31,10 @@ def read_employee_all():
     return response(200, 'Employees', employees_json, 'OK')
 
 @app.route('/employee/<employee_id>', methods = ['GET'])
-def read_employee_single():
-    pass
+def read_employee_single(employee_id):
+    employee_object = Employee.query.filter_by(employee_id = employee_id).first()
+    employee_json = employee_object.to_json()
+    return response(200, 'Employee', employee_json, 'OK')
 
 @app.route('/employee/<employee_id>', methods = ['PUT'])
 def update_employee(employee_id):
