@@ -11,4 +11,5 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 from .models import Employee, Clock
-from . import controllers
+from . import controllers_administrator
+from . import controllers_employee
