@@ -1,14 +1,17 @@
 from crypt import methods
-from .models import Employee, EmployeeLogs, Administrator, AdministratorLogs, Clock
-from .ordinary_functions import response, employee_log, administrator_log, validator_cpf
-from . import app, db
-from flask import request
+
+from app.forms import LoginForm
+from app.models import Employee, EmployeeLogs, Administrator, AdministratorLogs, Clock
+from app.ordinary_functions import response, employee_log, administrator_log, validator_cpf
+from app import app, db
+from flask import request, render_template
 import json
 
 
 @app.route('/')
-def index():
-    return 'hello world'
+def login():
+    form = LoginForm()
+    return render_template('login.html', form=form)
 
 @app.route('/employee', methods = ['POST'])
 def create_employee():
