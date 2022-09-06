@@ -130,3 +130,5 @@ dmypy.json
 
 # SQLAlchemy Migrations
 migrations/
+
+tester.py
