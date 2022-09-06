@@ -8,9 +8,15 @@ from flask import request, render_template
 import json
 
 
-@app.route('/')
+@app.route('/', methods = ['GET', 'POST'])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        print(form.email.data)
+        print(form.password.data)
+        print(form.remember_me.data)
+    else:
+        print(form.errors)
     return render_template('login.html', form=form)
 
 @app.route('/employee', methods = ['POST'])
