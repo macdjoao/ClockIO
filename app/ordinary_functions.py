@@ -1,4 +1,3 @@
-from .models import EmployeeLogs, AdministratorLogs
 from flask import Response
 import json
 
@@ -19,11 +18,3 @@ def validator_cpf(cpf):
         return valid_cpf
     else:
         raise ValueError
-
-def employee_log(employeelogs_type, employeelogs_employee_id, employeelogs_action):
-    log_object = EmployeeLogs(employeelogs_type=employeelogs_type, employeelogs_employee_id=employeelogs_employee_id, employeelogs_action=employeelogs_action)
-    return log_object
-
-def administrator_log(administratorlogs_type, administratorlogs_administrator_id, administratorlogs_action):
-    log_object = AdministratorLogs(administratorlogs_type=administratorlogs_type, administratorlogs_administrator_id=administratorlogs_administrator_id, administratorlogs_action=administratorlogs_action)
-    return log_object
