@@ -2,7 +2,7 @@ from crypt import methods
 
 from app.forms import LoginForm
 from app.models import Employee, EmployeeLogs, Administrator, AdministratorLogs, Clock
-from app.ordinary_functions import response, validator_cpf
+from app.ordinary_functions import generate_response, validator_cpf
 from app import app, db
 from flask import request, render_template
 from flask_sqlalchemy import SQLAlchemy
@@ -19,20 +19,20 @@ def create_clock(employee_id):
         db.session.add(log_object)
         
         db.session.commit()
-        return response(201, 'Clock', clock_object.to_json(), 'Clock inserted successfully')
+        return generate_response(201, 'Clock', clock_object.to_json(), 'Clock inserted successfully')
     except Exception as e:
         print('Error', e)
-        return response(400, 'Clock', {}, 'Clock not inserted')
+        return generate_response(400, 'Clock', {}, 'Clock not inserted')
 
 @app.route('/<employee_id>/read_clock', methods = ['GET'])
 def read_clock(employee_id):
     try:
         clock_object = Clock.query.filter_by(clock_employee_id = employee_id).all()
         clock_json = [clock.to_json() for clock in clock_object]
-        return response(200, 'Clocks', clock_json, 'OK')
+        return generate_response(200, 'Clocks', clock_json, 'OK')
     except Exception as e:
         print('Error', e)
-        return response(400, 'Clocks', {}, 'Error')
+        return generate_response(400, 'Clocks', {}, 'Error')
 
 # @app.route('/<employee_id>/read_clock/filter', methods = ['GET'])
 # def read_clock(employee_id):
@@ -51,7 +51,7 @@ def read_clock(employee_id):
 #             query = # search only the registers marked with 'extra'
 #         clock_object = Clock.query.filter_by('query').all()
 #         clock_json = clock_object.to_json()
-#         return response(200, 'Clocks', clock_json, 'OK')
+#         return generate_response(200, 'Clocks', clock_json, 'OK')
 #     except Exception as e:
 #         print('Error', e)
-#         return response(400, 'Clocks', {}, 'Error')
+#         return generate_response(400, 'Clocks', {}, 'Error')

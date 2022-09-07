@@ -2,7 +2,7 @@ from crypt import methods
 
 from app.forms import LoginForm
 from app.models import Employee, EmployeeLogs, Administrator, AdministratorLogs, Clock
-from app.ordinary_functions import response, validator_cpf
+from app.ordinary_functions import generate_response, validator_cpf
 from app import app, db
 from flask import request, render_template
 import json
@@ -30,30 +30,30 @@ def create_employee():
             db.session.add(log_object)
             
             db.session.commit()
-            return response(201, 'Employee', employee_object.to_json(), 'Employee entered successfully')
+            return generate_response(201, 'Employee', employee_object.to_json(), 'Employee entered successfully')
     except Exception as e:
             print('Error', e)
-            return response(400, 'Employee', {}, 'Employee not inserted')
+            return generate_response(400, 'Employee', {}, 'Employee not inserted')
 
 @app.route('/administrator/read_employee_all', methods = ['GET'])
 def read_employee_all():
     try:
         employees_objects = Employee.query.all()
         employees_json = [employee.to_json() for employee in employees_objects]
-        return response(200, 'Employees', employees_json, 'OK')
+        return generate_response(200, 'Employees', employees_json, 'OK')
     except Exception as e:
         print('Error', e)
-        return response(400, 'Employees', {}, 'Error')
+        return generate_response(400, 'Employees', {}, 'Error')
 
 @app.route('/administrator/read_employee_single/<employee_id>', methods = ['GET'])
 def read_employee_single(employee_id):
     try:
         employee_object = Employee.query.filter_by(employee_id = employee_id).first()
         employee_json = employee_object.to_json()
-        return response(200, 'Employee', employee_json, 'OK')
+        return generate_response(200, 'Employee', employee_json, 'OK')
     except Exception as e:
         print('Error', e)
-        return response(400, 'Employee', {}, 'Error')
+        return generate_response(400, 'Employee', {}, 'Error')
 
 @app.route('/administrator/update_employee/<employee_id>', methods = ['PUT'])
 def update_employee(employee_id):
@@ -72,10 +72,10 @@ def update_employee(employee_id):
         log_object = AdministratorLogs(administratorlogs_type='PUT', administratorlogs_administrator_id=1, administratorlogs_action=f'Update employee {employee_id}')
         db.session.add(log_object)
         db.session.commit()
-        return response(200, 'Employee', employee_object.to_json(), 'Employee updated successfully')
+        return generate_response(200, 'Employee', employee_object.to_json(), 'Employee updated successfully')
     except Exception as e:
         print('Error', e)
-        return response(400, 'Employee', employee_id, 'Employee not updated')
+        return generate_response(400, 'Employee', employee_id, 'Employee not updated')
 
 @app.route('/administrator/delete_employee/<employee_id>', methods = ['DELETE'])
 def delete_employee(employee_id):
@@ -85,10 +85,10 @@ def delete_employee(employee_id):
         db.session.delete(employee_object)
         db.session.add(log_object)
         db.session.commit()
-        return response(200, "Employee", employee_object.to_json(), "Employee deleted successfully")
+        return generate_response(200, "Employee", employee_object.to_json(), "Employee deleted successfully")
     except Exception as e:
         print('Error', e)
-        return response(400, "Employee", {}, "Employee not deleted")
+        return generate_response(400, "Employee", {}, "Employee not deleted")
 
 @app.route('/administrator/update_clock/<clock_id>', methods = ['PUT'])
 def update_clock(clock_id):
@@ -107,30 +107,30 @@ def update_clock(clock_id):
         db.session.add(log_object)
         
         db.session.commit()
-        return response(200, 'Clock', clock_object.to_json(), 'Clock updated successfully')
+        return generate_response(200, 'Clock', clock_object.to_json(), 'Clock updated successfully')
     except Exception as e:
         print('Error', e)
-        return response(400, 'Clock', {}, 'Clock not updated')
+        return generate_response(400, 'Clock', {}, 'Clock not updated')
 
 @app.route('/administrator/read_clock_all', methods = ['GET'])
 def read_clock_all():
     try:
         clock_object = Clock.query.all()
         clock_json = [clock.to_json() for clock in clock_object]
-        return response(200, 'Clocks', clock_json, 'OK')
+        return generate_response(200, 'Clocks', clock_json, 'OK')
     except Exception as e:
         print('Error', e)
-        return response(400, 'Clocks', {}, 'Error')
+        return generate_response(400, 'Clocks', {}, 'Error')
 
 @app.route('/administrator/read_clock_single/<employee_id>', methods = ['GET'])
 def read_clock_single(employee_id):
     try:
         clock_object = Clock.query.filter_by(clock_employee_id = employee_id ).all()
         clock_json = [clock.to_json() for clock in clock_object]
-        return response(200, 'Clocks', clock_json, 'OK')
+        return generate_response(200, 'Clocks', clock_json, 'OK')
     except Exception as e:
         print('Error', e)
-        return response(400, 'Clocks', {}, 'Error')
+        return generate_response(400, 'Clocks', {}, 'Error')
 
 # @app.route('/administrator/read_clock_all/filter')
 # def read_clock_all_filter():

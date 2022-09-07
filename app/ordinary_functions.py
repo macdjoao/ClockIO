@@ -2,7 +2,7 @@ from flask import Response
 import json
 
 
-def response(status, content_name, content, message = False):
+def generate_response(status, content_name, content, message = False):
     body = {}
     body[content_name]=content
     if (message):
