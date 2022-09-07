@@ -5,6 +5,7 @@ from app.models import Employee, EmployeeLogs, Administrator, AdministratorLogs,
 from app.ordinary_functions import response, validator_cpf
 from app import app, db
 from flask import request, render_template
+from flask_sqlalchemy import SQLAlchemy
 import json
 
 @app.route('/<employee_id>/create_clock', methods = ['POST'])
@@ -32,3 +33,25 @@ def read_clock(employee_id):
     except Exception as e:
         print('Error', e)
         return response(400, 'Clocks', {}, 'Error')
+
+# @app.route('/<employee_id>/read_clock/filter', methods = ['GET'])
+# def read_clock(employee_id):
+#     body = request.get_json()
+#     try:
+#         if('initial_date' in body and 'final_date' not in body):
+#             query = # search all the registers after 'initial_date'
+#             query = Clock.clock_input < body['initial_date']
+#         if('initial_date' not in body and 'final_date' in body):
+#             query = # search all the registers before 'final_date'
+#             query = Clock.clock_input > body['final_date']
+#         if('initial_date' in body and 'final_date' in body):
+#             query = # search all the registers between 'initial_date' and 'final_date'
+#             query = Clock.clock_input < body['initial_date'], Clock.clock_input > body['final_date']
+#         if('extra' in body):
+#             query = # search only the registers marked with 'extra'
+#         clock_object = Clock.query.filter_by('query').all()
+#         clock_json = clock_object.to_json()
+#         return response(200, 'Clocks', clock_json, 'OK')
+#     except Exception as e:
+#         print('Error', e)
+#         return response(400, 'Clocks', {}, 'Error')
