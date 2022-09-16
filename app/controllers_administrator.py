@@ -23,11 +23,11 @@ def login():
 def create_employee():
     body = request.get_json()
     try:
-            employee_object = Employee(employee_cpf=validator_cpf(body['employee_cpf']), employee_name=body['employee_name'], employee_password=body['employee_password'])
+            employee_object = Employee(employee_cpf=validator_cpf(body['employee_cpf']), employee_name=body['employee_name'], employee_password=body['employee_password'], employee_first_access=True, employee_status=True)
             db.session.add(employee_object)
             
-            log_object = AdministratorLogs(administratorlogs_type='POST', administratorlogs_administrator_id=1, administratorlogs_action=f'Create employee {body["employee_name"]}')
-            db.session.add(log_object)
+            # log_object = AdministratorLogs(administratorlogs_type='POST', administratorlogs_administrator_id=1, administratorlogs_action=f'Create employee {body["employee_name"]}')
+            # db.session.add(log_object)
             
             db.session.commit()
             return generate_response(201, 'Employee', employee_object.to_json(), 'Employee entered successfully')
@@ -69,8 +69,8 @@ def update_employee(employee_id):
         if ('employee_status' in body):
             employee_object.employee_status = body['employee_status']
         db.session.add(employee_object)        
-        log_object = AdministratorLogs(administratorlogs_type='PUT', administratorlogs_administrator_id=1, administratorlogs_action=f'Update employee {employee_id}')
-        db.session.add(log_object)
+        # log_object = AdministratorLogs(administratorlogs_type='PUT', administratorlogs_administrator_id=1, administratorlogs_action=f'Update employee {employee_id}')
+        # db.session.add(log_object)
         db.session.commit()
         return generate_response(200, 'Employee', employee_object.to_json(), 'Employee updated successfully')
     except Exception as e:
@@ -81,9 +81,9 @@ def update_employee(employee_id):
 def delete_employee(employee_id):
     employee_object = Employee.query.filter_by(employee_id = employee_id).first()
     try:
-        log_object = AdministratorLogs(administratorlogs_type='DELETE', administratorlogs_administrator_id=1, administratorlogs_action=f'Delete employee {employee_id}')
         db.session.delete(employee_object)
-        db.session.add(log_object)
+        # log_object = AdministratorLogs(administratorlogs_type='DELETE', administratorlogs_administrator_id=1, administratorlogs_action=f'Delete employee {employee_id}')
+        # db.session.add(log_object)
         db.session.commit()
         return generate_response(200, "Employee", employee_object.to_json(), "Employee deleted successfully")
     except Exception as e:
@@ -103,8 +103,8 @@ def update_clock(clock_id):
             clock_object.clock_extra = body['clock_extra']
         db.session.add(clock_object)
         
-        log_object = AdministratorLogs(administratorlogs_type='PUT', administratorlogs_administrator_id=1, administratorlogs_action=f'Update clock {clock_id}')
-        db.session.add(log_object)
+        # log_object = AdministratorLogs(administratorlogs_type='PUT', administratorlogs_administrator_id=1, administratorlogs_action=f'Update clock {clock_id}')
+        # db.session.add(log_object)
         
         db.session.commit()
         return generate_response(200, 'Clock', clock_object.to_json(), 'Clock updated successfully')
