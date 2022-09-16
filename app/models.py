@@ -84,18 +84,20 @@ class ClockLogs(db.Model):
     __tablename__ = 'clocklogs'
 
     clocklogs_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    clocklogs_clock_id = db.Column(db.Integer, db.ForeignKey("clocks.clock_id"))
     clocklogs_datetime = db.Column(db.DateTime, default=datetime.utcnow)
     clocklogs_type = db.Column(db.String(255), nullable=False)
     clocklogs_user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
 
     user = db.relationship('user', foreign_keys=clocklogs_user_id)
+    clock = db.relationship('clock', foreign_keys=clocklogs_clock_id)
 
     def __init__(self, userlogs_type, userlogs_user_id):
         self.userlogs_type = userlogs_type
         self.userlogs_user_id = userlogs_user_id
 
     def __repr__(self):
-        return f'<userlogs_id: {self.userlogs_id}, userlogs_datetime: {self.userlogs_datetime}, userlogs_type: {self.userlogs_type}, userlogs_user_id: {self.userlogs_user_id}>'
+        return f'<userlogs_id: {self.userlogs_id}, clocklogs_clock_id: {self.clocklogs_clock_id}, userlogs_datetime: {self.userlogs_datetime}, userlogs_type: {self.userlogs_type}, userlogs_user_id: {self.userlogs_user_id}>'
 
     def to_json(self):
-        return {"userlogs_id": self.userlogs_id, "userlogs_datetime": self.userlogs_datetime, "userlogs_type": self.userlogs_type, "userlogs_user_id": self.userlogs_user_id}
+        return {"userlogs_id": self.userlogs_id, "clocklogs_clock_id": self.clocklogs_clock_id, "userlogs_datetime": self.userlogs_datetime, "userlogs_type": self.userlogs_type, "userlogs_user_id": self.userlogs_user_id}
