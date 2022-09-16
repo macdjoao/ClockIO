@@ -7,122 +7,75 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # $ flask db migrate
 # $ flask db upgrade
 
-class Administrator(db.Model):
-    __tablename__ = 'administrators'
+class User(db.Model):
+    __tablename__ = 'users'
 
-    administrator_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    administrator_cpf = db.Column(db.String(11), nullable=False, unique=True)
-    administrator_name = db.Column(db.String(255), nullable=False)
-    administrator_password = db.Column(db.String(255), nullable=False)
-    administrator_first_access = db.Column(db.Boolean, nullable=False, default=True)
-    administrator_status = db.Column(db.Boolean, nullable=False, default=True)
+    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_cpf = db.Column(db.String(11), nullable=False, unique=True)
+    user_name = db.Column(db.String(255), nullable=False)
+    user_password = db.Column(db.String(255), nullable=False)
+    user_first_access = db.Column(db.Boolean, nullable=False, default=True)
+    user_status = db.Column(db.Boolean, nullable=False, default=True)
+    user_is_admin = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, administrator_cpf, administrator_name, administrator_password, administrator_first_access, administrator_status):
-        self.administrator_cpf = administrator_cpf
-        self.administrator_name = administrator_name
-        self.administrator_password = generate_password_hash(administrator_password)
-        self.administrator_first_access = administrator_first_access
-        self.administrator_status = administrator_status
-
-    def __repr__(self):
-        return f'<administrator_id: {self.administrator_id}, administrator_cpf: {self.administrator_cpf}, administrator_name: {self.administrator_name}, administrator_first_access: {self.administrator_first_access}, administrator_status: {self.administrator_status}>'
-
-    def to_json(self):
-        return {"administrator_id": self.administrator_id, "administrator_cpf": self.administrator_cpf, "administrator_name": self.administrator_name, "administrator_first_access": self.administrator_first_access, "administrator_status": self.administrator_status}
-
-    def verify_password(self, administrator_password):
-        return check_password_hash(self.administrator_password, administrator_password)
-
-class Employee(db.Model):
-    __tablename__ = 'employees'
-
-    employee_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    employee_cpf = db.Column(db.String(11), nullable=False, unique=True)
-    employee_name = db.Column(db.String(255), nullable=False)
-    employee_password = db.Column(db.String(255), nullable=False)
-    employee_first_access = db.Column(db.Boolean, nullable=False, default=True)
-    employee_status = db.Column(db.Boolean, nullable=False, default=True)
-
-    def __init__(self, employee_cpf, employee_name, employee_password, employee_first_access, employee_status):
-        self.employee_cpf = employee_cpf
-        self.employee_name = employee_name
-        self.employee_password = generate_password_hash(employee_password)
-        self.employee_first_access = employee_first_access
-        self.employee_status = employee_status
+    def __init__(self, user_cpf, user_name, user_password, user_first_access, user_status, user_is_admin):
+        self.user_cpf = user_cpf
+        self.user_name = user_name
+        self.user_password = generate_password_hash(user_password)
+        self.user_first_access = user_first_access
+        self.user_status = user_status
+        self.user_is_admin = user_is_admin
 
     def __repr__(self):
-        return f'<employee_id: {self.employee_id}, employee_cpf: {self.employee_cpf}, employee_name: {self.employee_name}, employee_first_access: {self.employee_first_access}, employee_status: {self.employee_status}>'
+        return f'<user_id: {self.user_id}, user_cpf: {self.user_cpf}, user_name: {self.user_name}, user_first_access: {self.user_first_access}, user_status: {self.user_status}, user_is_admin: {self.user_is_admin}>'
 
     def to_json(self):
-        return {"employee_id": self.employee_id, "employee_cpf": self.employee_cpf, "employee_name": self.employee_name, "employee_first_access": self.employee_first_access, "employee_status": self.employee_status}
+        return {"user_id": self.user_id, "user_cpf": self.user_cpf, "user_name": self.user_name, "user_first_access": self.user_first_access, "user_status": self.user_status, "user_is_admin": self.user_is_admin}
 
-    def verify_password(self, employee_password):
-        return check_password_hash(self.employee_password, employee_password)
-        
-class AdministratorLogs(db.Model):
-    __tablename__ = 'administratorlogs'
+    def verify_password(self, user_password):
+        return check_password_hash(self.user_password, user_password)
 
-    administratorlogs_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    administratorlogs_datetime = db.Column(db.DateTime, default=datetime.utcnow)
-    administratorlogs_type = db.Column(db.String(255), nullable=False)
-    administratorlogs_administrator_id = db.Column(db.Integer, db.ForeignKey("administrators.administrator_id"))
-    administratorlogs_action = db.Column(db.Text, nullable=False)
+class UserLogs(db.Model):
+    __tablename__ = 'userlogs'
 
-    employee = db.relationship('Administrator', foreign_keys=administratorlogs_administrator_id)
+    userlogs_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    userlogs_datetime = db.Column(db.DateTime, default=datetime.utcnow)
+    userlogs_type = db.Column(db.String(255), nullable=False)
+    userlogs_user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    userlogs_action = db.Column(db.Text, nullable=False)
 
-    def __init__(self, administratorlogs_type, administratorlogs_administrator_id, administratorlogs_action):
-        self.administratorlogs_type = administratorlogs_type
-        self.administratorlogs_administrator_id = administratorlogs_administrator_id
-        self.administratorlogs_action = administratorlogs_action
+    user = db.relationship('user', foreign_keys=userlogs_user_id)
+
+    def __init__(self, userlogs_type, userlogs_user_id, userlogs_action):
+        self.userlogs_type = userlogs_type
+        self.userlogs_user_id = userlogs_user_id
+        self.userlogs_action = userlogs_action
 
     def __repr__(self):
-        return f'<administratorlogs_id: {self.administratorlogs_id}, administratorlogs_datetime: {self.administratorlogs_datetime}, administratorlogs_type: {self.administratorlogs_type}, administratorlogs_administrator_id: {self.administratorlogs_administrator_id}, administratorlogs_action: {self.administratorlogs_action}>'
+        return f'<userlogs_id: {self.userlogs_id}, userlogs_datetime: {self.userlogs_datetime}, userlogs_type: {self.userlogs_type}, userlogs_user_id: {self.userlogs_user_id}, userlogs_action: {self.userlogs_action}>'
 
     def to_json(self):
-        return {"administratorlogs_id": self.administratorlogs_id, "administratorlogs_datetime": self.administratorlogs_datetime, "administratorlogs_type": self.administratorlogs_type, "administratorlogs_administrator_id": self.administratorlogs_administrator_id, "administratorlogs_action": self.administratorlogs_action}
-
-class EmployeeLogs(db.Model):
-    __tablename__ = 'employeelogs'
-
-    employeelogs_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    employeelogs_datetime = db.Column(db.DateTime, default=datetime.utcnow)
-    employeelogs_type = db.Column(db.String(255), nullable=False)
-    employeelogs_employee_id = db.Column(db.Integer, db.ForeignKey("employees.employee_id"))
-    employeelogs_action = db.Column(db.Text, nullable=False)
-
-    employee = db.relationship('Employee', foreign_keys=employeelogs_employee_id)
-
-    def __init__(self, employeelogs_type, employeelogs_employee_id, employeelogs_action):
-        self.employeelogs_type = employeelogs_type
-        self.employeelogs_employee_id = employeelogs_employee_id
-        self.employeelogs_action = employeelogs_action
-
-    def __repr__(self):
-        return f'<employeelogs_id: {self.employeelogs_id}, employeelogs_datetime: {self.employeelogs_datetime}, employeelogs_type: {self.employeelogs_type}, employeelogs_employee_id: {self.employeelogs_employee_id}, employeelogs_action: {self.employeelogs_action}>'
-
-    def to_json(self):
-        return {"employeelogs_id": self.employeelogs_id, "employeelogs_datetime": self.employeelogs_datetime, "employeelogs_type": self.employeelogs_type, "employeelogs_employee_id": self.employeelogs_employee_id, "employeelogs_action": self.employeelogs_action}
-
+        return {"userlogs_id": self.userlogs_id, "userlogs_datetime": self.userlogs_datetime, "userlogs_type": self.userlogs_type, "userlogs_user_id": self.userlogs_user_id, "userlogs_action": self.userlogs_action}
 
 class Clock(db.Model):
     __tablename__ = 'clocks'
 
     clock_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    clock_employee_id = db.Column(db.Integer, db.ForeignKey("employees.employee_id"))
+    clock_user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     clock_input = db.Column(db.DateTime, nullable=False)
     clock_output = db.Column(db.DateTime, nullable=False)
     clock_extra = db.Column(db.Boolean, default=False)
 
-    employee = db.relationship('Employee', foreign_keys=clock_employee_id)
+    user = db.relationship('user', foreign_keys=clock_user_id)
 
-    def __init__(self, clock_employee_id, clock_input, clock_output, clock_extra):
-        self.clock_employee_id = clock_employee_id
+    def __init__(self, clock_user_id, clock_input, clock_output, clock_extra):
+        self.clock_user_id = clock_user_id
         self.clock_input = clock_input
         self.clock_output = clock_output
         self.clock_extra = clock_extra
 
     def __repr__(self):
-        return f'<clock_id: {self.clock_id}, clock_employee_id: {self.clock_employee_id}, clock_input: {self.clock_input}, clock_output: {self.clock_output}, clock_extra: {self.clock_extra}>'
+        return f'<clock_id: {self.clock_id}, clock_user_id: {self.clock_user_id}, clock_input: {self.clock_input}, clock_output: {self.clock_output}, clock_extra: {self.clock_extra}>'
 
     def to_json(self):
-        return {"clock_id": self.clock_id, "clock_employee_id": self.clock_employee_id, "clock_input": self.clock_input, "clock_output": self.clock_output, "clock_extra": self.clock_extra}
+        return {"clock_id": self.clock_id, "clock_user_id": self.clock_user_id, "clock_input": self.clock_input, "clock_output": self.clock_output, "clock_extra": self.clock_extra}
