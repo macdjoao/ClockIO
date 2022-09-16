@@ -15,14 +15,14 @@ class NewPassword(FlaskForm):
     # when first_access is true, the user must redefine his password
     pass
 
-class CreateuserForm(FlaskForm):
+class CreateUserForm(FlaskForm):
     user_cpf = StringField('user_cpf', validators=[DataRequired()])
     user_name = StringField('user_name', validators=[DataRequired()])
 
     # must be cpf for default, user must change the password in first access
     user_password = PasswordField('user_password', validators=[DataRequired()])
 
-class UpdateuserForm(FlaskForm):
+class UpdateUserForm(FlaskForm):
     # select user (selectfield)
     user_cpf = StringField('user_cpf')
     user_name = StringField('user_name')
