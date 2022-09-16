@@ -23,7 +23,7 @@ def login():
 def create_employee():
     body = request.get_json()
     try:
-            employee_object = Employee(employee_cpf=validator_cpf(body['employee_cpf']), employee_name=body['employee_name'], employee_password=body['employee_password'], employee_first_access=True, employee_status=True)
+            employee_object = Employee(employee_cpf=validator_cpf(body['employee_cpf']), employee_name=body['employee_name'], employee_password=body['employee_cpf'], employee_first_access=True, employee_status=True)
             db.session.add(employee_object)
             
             # log_object = AdministratorLogs(administratorlogs_type='POST', administratorlogs_administrator_id=1, administratorlogs_action=f'Create employee {body["employee_name"]}')

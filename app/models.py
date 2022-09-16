@@ -1,5 +1,6 @@
 from datetime import datetime
 from . import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Migrate updates to the database
 # $ flask db stamp head
@@ -19,7 +20,7 @@ class Administrator(db.Model):
     def __init__(self, administrator_cpf, administrator_name, administrator_password, administrator_first_access, administrator_status):
         self.administrator_cpf = administrator_cpf
         self.administrator_name = administrator_name
-        self.administrator_password = administrator_password
+        self.administrator_password = generate_password_hash(administrator_password)
         self.administrator_first_access = administrator_first_access
         self.administrator_status = administrator_status
 
@@ -28,6 +29,9 @@ class Administrator(db.Model):
 
     def to_json(self):
         return {"administrator_id": self.administrator_id, "administrator_cpf": self.administrator_cpf, "administrator_name": self.administrator_name, "administrator_first_access": self.administrator_first_access, "administrator_status": self.administrator_status}
+
+    def verify_password(self, administrator_password):
+        return check_password_hash(self.administrator_password, administrator_password)
 
 class Employee(db.Model):
     __tablename__ = 'employees'
@@ -42,7 +46,7 @@ class Employee(db.Model):
     def __init__(self, employee_cpf, employee_name, employee_password, employee_first_access, employee_status):
         self.employee_cpf = employee_cpf
         self.employee_name = employee_name
-        self.employee_password = employee_password
+        self.employee_password = generate_password_hash(employee_password)
         self.employee_first_access = employee_first_access
         self.employee_status = employee_status
 
@@ -52,6 +56,9 @@ class Employee(db.Model):
     def to_json(self):
         return {"employee_id": self.employee_id, "employee_cpf": self.employee_cpf, "employee_name": self.employee_name, "employee_first_access": self.employee_first_access, "employee_status": self.employee_status}
 
+    def verify_password(self, employee_password):
+        return check_password_hash(self.employee_password, employee_password)
+        
 class AdministratorLogs(db.Model):
     __tablename__ = 'administratorlogs'
 
