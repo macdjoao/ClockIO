@@ -42,10 +42,6 @@ class UpdateClockForm(FlaskForm):
     clock_output = DateTimeField('clock_output')
     clock_extra = BooleanField('clock_extra')
 
-class ReadClockAll(FlaskForm):
-    # select all registers, with pagination
-    pass
-
 class ReadClockWithFilters(FlaskForm):
     # select user (selectfield) (all, one or many)
     # select first_date
