@@ -23,7 +23,7 @@ def login():
 def create_employee():
     body = request.get_json()
     try:
-            employee_object = Employee(employee_cpf=validator_cpf(body['employee_cpf']), employee_email=body['employee_email'], employee_name=body['employee_name'], employee_password_hash=body['employee_password_hash'])
+            employee_object = Employee(employee_cpf=validator_cpf(body['employee_cpf']), employee_name=body['employee_name'], employee_password=body['employee_password'])
             db.session.add(employee_object)
             
             log_object = AdministratorLogs(administratorlogs_type='POST', administratorlogs_administrator_id=1, administratorlogs_action=f'Create employee {body["employee_name"]}')
@@ -62,12 +62,12 @@ def update_employee(employee_id):
     try:
         if ('employee_cpf' in body):
             employee_object.employee_cpf = validator_cpf(body['employee_cpf'])
-        if ('employee_email' in body):
-            employee_object.employee_email = body['employee_email']
         if ('employee_name' in body):
             employee_object.employee_name = body['employee_name']
         if ('employee_first_access' in body):
             employee_object.employee_first_access = body['employee_first_access']
+        if ('employee_status' in body):
+            employee_object.employee_status = body['employee_status']
         db.session.add(employee_object)        
         log_object = AdministratorLogs(administratorlogs_type='PUT', administratorlogs_administrator_id=1, administratorlogs_action=f'Update employee {employee_id}')
         db.session.add(log_object)

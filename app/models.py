@@ -10,20 +10,47 @@ class Administrator(db.Model):
     __tablename__ = 'administrators'
 
     administrator_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    administrator_cpf = db.Column(db.String(11), nullable=False, unique=True)
     administrator_name = db.Column(db.String(255), nullable=False)
-    administrator_password_hash = db.Column(db.String(255), nullable=False)
-    administrator_first_access = db.Column(db.Boolean, default=False)
+    administrator_password = db.Column(db.String(255), nullable=False)
+    administrator_first_access = db.Column(db.Boolean, nullable=False, default=True)
+    administrator_status = db.Column(db.Boolean, nullable=False, default=True)
 
-    def __init__(self, administrator_name, administrator_password_hash):
+    def __init__(self, administrator_cpf, administrator_name, administrator_password, administrator_first_access, administrator_status):
+        self.administrator_cpf = administrator_cpf
         self.administrator_name = administrator_name
-        self.administrator_password_hash = administrator_password_hash
+        self.administrator_password = administrator_password
+        self.administrator_first_access = administrator_first_access
+        self.administrator_status = administrator_status
 
     def __repr__(self):
-        return f'<administrator_id: {self.administrator_id}, administrator_name: {self.administrator_name}, administrator_password_hash: {self.administrator_password_hash}, administrator_first_access: {self.administrator_first_access}>'
+        return f'<administrator_id: {self.administrator_id}, administrator_cpf: {self.administrator_cpf}, administrator_name: {self.administrator_name}, administrator_first_access: {self.administrator_first_access}, administrator_status: {self.administrator_status}>'
 
     def to_json(self):
-        return {"administrator_id": self.administrator_id, "administrator_name": self.administrator_name, "administrator_password_hash": self.administrator_password_hash, "administrator_first_access": self.administrator_first_access}
+        return {"administrator_id": self.administrator_id, "administrator_cpf": self.administrator_cpf, "administrator_name": self.administrator_name, "administrator_first_access": self.administrator_first_access, "administrator_status": self.administrator_status}
 
+class Employee(db.Model):
+    __tablename__ = 'employees'
+
+    employee_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    employee_cpf = db.Column(db.String(11), nullable=False, unique=True)
+    employee_name = db.Column(db.String(255), nullable=False)
+    employee_password = db.Column(db.String(255), nullable=False)
+    employee_first_access = db.Column(db.Boolean, nullable=False, default=True)
+    employee_status = db.Column(db.Boolean, nullable=False, default=True)
+
+    def __init__(self, employee_cpf, employee_name, employee_password, employee_first_access, employee_status):
+        self.employee_cpf = employee_cpf
+        self.employee_name = employee_name
+        self.employee_password = employee_password
+        self.employee_first_access = employee_first_access
+        self.employee_status = employee_status
+
+    def __repr__(self):
+        return f'<employee_id: {self.employee_id}, employee_cpf: {self.employee_cpf}, employee_name: {self.employee_name}, employee_first_access: {self.employee_first_access}, employee_status: {self.employee_status}>'
+
+    def to_json(self):
+        return {"employee_id": self.employee_id, "employee_cpf": self.employee_cpf, "employee_name": self.employee_name, "employee_first_access": self.employee_first_access, "employee_status": self.employee_status}
 
 class AdministratorLogs(db.Model):
     __tablename__ = 'administratorlogs'
@@ -46,30 +73,6 @@ class AdministratorLogs(db.Model):
 
     def to_json(self):
         return {"administratorlogs_id": self.administratorlogs_id, "administratorlogs_datetime": self.administratorlogs_datetime, "administratorlogs_type": self.administratorlogs_type, "administratorlogs_administrator_id": self.administratorlogs_administrator_id, "administratorlogs_action": self.administratorlogs_action}
-
-
-class Employee(db.Model):
-    __tablename__ = 'employees'
-
-    employee_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    employee_cpf = db.Column(db.String(11), nullable=False, unique=True)
-    employee_email = db.Column(db.String(255), nullable=False, unique=True)
-    employee_name = db.Column(db.String(255), nullable=False)
-    employee_password_hash = db.Column(db.String(255), nullable=False)
-    employee_first_access = db.Column(db.Boolean, default=False)
-
-    def __init__(self, employee_cpf, employee_email, employee_name, employee_password_hash):
-        self.employee_cpf = employee_cpf
-        self.employee_email = employee_email
-        self.employee_name = employee_name
-        self.employee_password_hash = employee_password_hash
-
-    def __repr__(self):
-        return f'<employee_id: {self.employee_id}, employee_cpf: {self.employee_cpf}, employee_email: {self.employee_email}, employee_name: {self.employee_name}, employee_password_hash: {self.employee_password_hash}, employee_first_access: {self.employee_first_access}>'
-
-    def to_json(self):
-        return {"employee_id": self.employee_id, "employee_cpf": self.employee_cpf, "employee_email": self.employee_email, "employee_name": self.employee_name, "employee_password_hash": self.employee_password_hash, "employee_first_access": self.employee_first_access}
-
 
 class EmployeeLogs(db.Model):
     __tablename__ = 'employeelogs'
