@@ -8,34 +8,28 @@ from wtforms.validators import DataRequired
 #'SelectMultipleField', 'StringField', 'TimeField'
 
 class LoginForm(FlaskForm):
-    email = StringField('email', validators=[DataRequired()])
+    user_cpf = StringField('cpf', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
-    remember_me = BooleanField('remember_me')
 
 class NewPassword(FlaskForm):
     # when first_access is true, the user must redefine his password
     pass
 
-class CreateEmployeeForm(FlaskForm):
-    employee_cpf = StringField('employee_cpf', validators=[DataRequired()])
-    employee_email = StringField('employee_email', validators=[DataRequired()])
-    employee_name = StringField('employee_name', validators=[DataRequired()])
+class CreateuserForm(FlaskForm):
+    user_cpf = StringField('user_cpf', validators=[DataRequired()])
+    user_name = StringField('user_name', validators=[DataRequired()])
 
     # must be cpf for default, user must change the password in first access
-    employee_password_hash = PasswordField('employee_password_hash', validators=[DataRequired()])
+    user_password = PasswordField('user_password', validators=[DataRequired()])
 
-class UpdateEmployeeForm(FlaskForm):
-    # select employee (selectfield)
-    employee_cpf = StringField('employee_cpf')
-    employee_email = StringField('employee_email')
-    employee_name = StringField('employee_name')
+class UpdateuserForm(FlaskForm):
+    # select user (selectfield)
+    user_cpf = StringField('user_cpf')
+    user_name = StringField('user_name')
 
-    # must change the actual password to employee_cpf
-    employee_first_access = BooleanField('employee_first_access')
-
-class DeleteEmployeeForm(FlaskForm):
-    # select employee (selectfield)
-    pass
+    # must change the actual password to user_cpf
+    user_first_access = BooleanField('user_first_access')
+    user_status = BooleanField('user_status')
 
 class CreateClockForm(FlaskForm):
     clock_input = DateTimeField('clock_input', validators=[DataRequired()])
@@ -52,12 +46,8 @@ class ReadClockAll(FlaskForm):
     # select all registers, with pagination
     pass
 
-class ReadClockSingleForm(FlaskForm):
-    # select employee registers (selectfield)
-    pass
-
 class ReadClockWithFilters(FlaskForm):
-    # select employee (selectfield) (all, one or many)
+    # select user (selectfield) (all, one or many)
     # select first_date
     # select last_date
     # select extra
