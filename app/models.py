@@ -79,3 +79,23 @@ class Clock(db.Model):
 
     def to_json(self):
         return {"clock_id": self.clock_id, "clock_user_id": self.clock_user_id, "clock_input": self.clock_input, "clock_output": self.clock_output, "clock_extra": self.clock_extra}
+
+class ClockLogs(db.Model):
+    __tablename__ = 'clocklogs'
+
+    clocklogs_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    clocklogs_datetime = db.Column(db.DateTime, default=datetime.utcnow)
+    clocklogs_type = db.Column(db.String(255), nullable=False)
+    clocklogs_user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+
+    user = db.relationship('user', foreign_keys=clocklogs_user_id)
+
+    def __init__(self, userlogs_type, userlogs_user_id):
+        self.userlogs_type = userlogs_type
+        self.userlogs_user_id = userlogs_user_id
+
+    def __repr__(self):
+        return f'<userlogs_id: {self.userlogs_id}, userlogs_datetime: {self.userlogs_datetime}, userlogs_type: {self.userlogs_type}, userlogs_user_id: {self.userlogs_user_id}>'
+
+    def to_json(self):
+        return {"userlogs_id": self.userlogs_id, "userlogs_datetime": self.userlogs_datetime, "userlogs_type": self.userlogs_type, "userlogs_user_id": self.userlogs_user_id}
