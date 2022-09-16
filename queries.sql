@@ -18,3 +18,9 @@ VALUES ('CREATE', 1, 'CREATE A CLOCK');
 
 INSERT INTO clocks (clock_employee_id, clock_input, clock_output, clock_extra) 
 VALUES (1, '2022-08-31 12:00:00', '2022-08-31 18:00:00', 0);
+
+INSERT INTO users (user_cpf, user_name, user_password, user_first_access, user_status, user_is_admin)
+VALUES ('05653031127', 'joao', 'senha123', 0, 1, 1);
+
+INSERT INTO users (user_cpf, user_name, user_password, user_first_access, user_status, user_is_admin)
+VALUES ('12345678901', 'admin', 'senha123', 0, 1, 1);

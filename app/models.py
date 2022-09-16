@@ -44,7 +44,7 @@ class UserLogs(db.Model):
     userlogs_user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     userlogs_action = db.Column(db.Text, nullable=False)
 
-    user = db.relationship('user', foreign_keys=userlogs_user_id)
+    # user = db.relationship('users', foreign_keys=userlogs_user_id)
 
     def __init__(self, userlogs_type, userlogs_user_id, userlogs_action):
         self.userlogs_type = userlogs_type
@@ -66,7 +66,7 @@ class Clock(db.Model):
     clock_output = db.Column(db.DateTime, nullable=False)
     clock_extra = db.Column(db.Boolean, default=False)
 
-    user = db.relationship('user', foreign_keys=clock_user_id)
+    # user = db.relationship('user', foreign_keys=clock_user_id)
 
     def __init__(self, clock_user_id, clock_input, clock_output, clock_extra):
         self.clock_user_id = clock_user_id
@@ -89,15 +89,16 @@ class ClockLogs(db.Model):
     clocklogs_type = db.Column(db.String(255), nullable=False)
     clocklogs_user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
 
-    user = db.relationship('user', foreign_keys=clocklogs_user_id)
-    clock = db.relationship('clock', foreign_keys=clocklogs_clock_id)
+    # user = db.relationship('user', foreign_keys=clocklogs_user_id)
+    # clock = db.relationship('clock', foreign_keys=clocklogs_clock_id)
 
-    def __init__(self, userlogs_type, userlogs_user_id):
-        self.userlogs_type = userlogs_type
-        self.userlogs_user_id = userlogs_user_id
+    def __init__(self, clocklogs_clock_id, clocklogs_type, clocklogs_user_id):
+        self.clocklogs_clock_id = clocklogs_clock_id
+        self.clocklogs_type = clocklogs_type
+        self.clocklogs_user_id = clocklogs_user_id
 
     def __repr__(self):
-        return f'<userlogs_id: {self.userlogs_id}, clocklogs_clock_id: {self.clocklogs_clock_id}, userlogs_datetime: {self.userlogs_datetime}, userlogs_type: {self.userlogs_type}, userlogs_user_id: {self.userlogs_user_id}>'
+        return f'<userlogs_id: {self.userlogs_id}, clocklogs_clock_id: {self.clocklogs_clock_id}, clocklogs_datetime: {self.clocklogs_datetime}, clocklogs_type: {self.clocklogs_type}, clocklogs_user_id: {self.clocklogs_user_id}>'
 
     def to_json(self):
-        return {"userlogs_id": self.userlogs_id, "clocklogs_clock_id": self.clocklogs_clock_id, "userlogs_datetime": self.userlogs_datetime, "userlogs_type": self.userlogs_type, "userlogs_user_id": self.userlogs_user_id}
+        return {"userlogs_id": self.userlogs_id, "clocklogs_clock_id": self.clocklogs_clock_id, "clocklogs_datetime": self.clocklogs_datetime, "userlogs_type": self.clocklogs_type, "clocklogs_user_id": self.clocklogs_user_id}

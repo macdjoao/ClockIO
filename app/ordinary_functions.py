@@ -18,3 +18,9 @@ def validator_cpf(cpf):
         return valid_cpf
     else:
         raise ValueError
+
+def is_user():
+    pass
+
+def is_admin():
+    pass
